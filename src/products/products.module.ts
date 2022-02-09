@@ -7,6 +7,8 @@ import { redisProvider, RedisService } from '../database/redis.provider';
 import { BullModule } from '@nestjs/bull';
 import { ProductsQueue } from './products.queue';
 import { join } from 'path';
+import { SearchService } from '../search/search.service';
+import { SearchModule } from '../search/search.module';
 
 @Module({
   controllers: [ProductsController],
@@ -16,7 +18,8 @@ import { join } from 'path';
     ProductsService,
     ProductsRepository,
     RedisService,
-    ProductsQueue
+    ProductsQueue,
+    SearchService
   ],
   imports: [
     BullModule.registerQueue({
@@ -25,7 +28,8 @@ import { join } from 'path';
     BullModule.registerQueue({
       name: 'sandBoxQueue',
       processors: [join(__dirname, 'sandbox.queue.processor.js')]
-    })
+    }),
+    SearchModule
   ]
 })
 export class ProductsModule {}

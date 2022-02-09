@@ -16,6 +16,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_DB: 0
+      ELASTIC_HOST: http://elasticsearch:9200
     volumes:
       - ./:/usr/src/app
     ports:
@@ -26,6 +27,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - elasticsearch
 
   postgres:
     container_name: nest_app_postgres
@@ -48,6 +50,25 @@ services:
     volumes:
       - redis:/data
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.2
+    container_name: nest_app_elasticsearch
+    restart: unless-stopped
+    environment:
+      - cluster.name=docker-cluster
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+
 volumes:
   postgres:
   redis:
+  elasticsearch-data:

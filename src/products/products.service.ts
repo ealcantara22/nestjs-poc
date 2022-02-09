@@ -8,6 +8,7 @@ import { ProductsQueue } from './products.queue';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { plainToInstance } from 'class-transformer';
+import { SearchService } from '../search/search.service';
 
 @Injectable()
 export class ProductsService {
@@ -16,7 +17,8 @@ export class ProductsService {
     private readonly redis: RedisService,
     private readonly productQueue: ProductsQueue,
     @InjectQueue('sandBoxQueue') private readonly sandbox: Queue,
-    @InjectQueue('productQueue') private readonly productQueueV2: Queue
+    @InjectQueue('productQueue') private readonly productQueueV2: Queue,
+    private readonly searchService: SearchService
   ) {}
 
   async create(createProductDto: CreateProductDto): Promise<object> {
@@ -56,6 +58,7 @@ export class ProductsService {
 
     const updatedProduct = await this.productRepository.update(id, updateProductDto);
     await this.redis.del(id.toString()); // delete product from cache
+    this.searchService.update('local_products', id, updatedProduct); // update product in elasticsearch
 
     console.log(`Parent process Id: ${process.pid}`);
     await this.productQueue.update(updatedProduct); // worker config init consumers
