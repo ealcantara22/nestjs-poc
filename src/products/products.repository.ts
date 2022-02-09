@@ -6,7 +6,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
-export class ProductRepository {
+export class ProductsRepository {
   constructor(@Inject('KNEX') private readonly knex: Knex) {}
 
   protected readonly PRODUCTS_TABLE: string = 'products';

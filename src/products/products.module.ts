@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { ProductsController } from './products.controller';
-import { ProductRepository } from './product.repository';
+import { ProductsRepository } from './products.repository';
 import { dbProvider } from '../database/database.provider';
 import { redisProvider, RedisService } from '../database/redis.provider';
 import { BullModule } from '@nestjs/bull';
@@ -14,7 +14,7 @@ import { join } from 'path';
     dbProvider,
     redisProvider,
     ProductsService,
-    ProductRepository,
+    ProductsRepository,
     RedisService,
     ProductsQueue
   ],

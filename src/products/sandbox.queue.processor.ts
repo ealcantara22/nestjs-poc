@@ -1,7 +1,7 @@
 import { Job, DoneCallback } from 'bull';
 import { RedisService, redisClient } from '../database/redis.provider';
 import { connection as knex } from '../database/database.provider';
-import { ProductRepository } from './product.repository';
+import { ProductsRepository } from './products.repository';
 
 /**
  * Dependency injection is not available in sandboxed processes.
@@ -18,7 +18,7 @@ export default async function (job: Job, cb: DoneCallback) {
   await redis.del(id);
   console.log('product deleted from cache:', await redis.get(id));
 
-  const productRepository = new ProductRepository(knex);
+  const productRepository = new ProductsRepository(knex);
   const product = await productRepository.getProduct(id);
   console.log('from db:', product);
   cb(null, 'It works');

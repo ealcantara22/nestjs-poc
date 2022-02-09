@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ProductRepository } from './product.repository';
+import { ProductsRepository } from './products.repository';
 import { Product } from './entities/product.entity';
 import { RedisService } from '../database/redis.provider';
 import { ProductsQueue } from './products.queue';
@@ -12,7 +12,7 @@ import { plainToInstance } from 'class-transformer';
 @Injectable()
 export class ProductsService {
   constructor(
-    private readonly productRepository: ProductRepository,
+    private readonly productRepository: ProductsRepository,
     private readonly redis: RedisService,
     private readonly productQueue: ProductsQueue,
     @InjectQueue('sandBoxQueue') private readonly sandbox: Queue,
