@@ -9,6 +9,7 @@ import { ProductsQueue } from './products.queue';
 import { join } from 'path';
 import { SearchService } from '../search/search.service';
 import { SearchModule } from '../search/search.module';
+import { ProductsResolver } from './products.resolver';
 
 @Module({
   controllers: [ProductsController],
@@ -19,7 +20,8 @@ import { SearchModule } from '../search/search.module';
     ProductsRepository,
     RedisService,
     ProductsQueue,
-    SearchService
+    SearchService,
+    ProductsResolver
   ],
   imports: [
     BullModule.registerQueue({
